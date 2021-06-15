@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <groupId>org.example</groupId>
+<!--    <artifactId>hazelcast_parent</artifactId>-->
+    <version>1.0-SNAPSHOT</version>
+    <artifactId>angular-frontend-builder</artifactId>
+    <packaging>war</packaging>
+    <name>Angular Frontend War Builder</name>
+    <description>Build dist folder to war</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
+        <maven.plugin.war.version>3.3.1</maven.plugin.war.version>
+        <maven.plugin.resources.version>3.2.0</maven.plugin.resources.version>
+        <frontend.dist.path.steps.comment>
+            Please exec "ng build --base-href /testing-context-path/" at first in angular project
+        </frontend.dist.path.steps.comment>
+
+        <frontend.dist.path>C:/git/frontend-angular/dist/angular-frontend</frontend.dist.path>
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${maven.plugin.war.version}</version>
+            <type>maven-plugin</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>${maven.plugin.resources.version}</version>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <finalName>angular-frontend</finalName>
+        <!--        <resources>-->
+        <!--            <resource>-->
+        <!--                <filtering>true</filtering>-->
+        <!--                <directory>src/main/resources</directory>-->
+        <!--            </resource>-->
+        <!--        </resources>-->
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-angular</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>${project.build.directory}/classes/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${frontend.dist.path}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
